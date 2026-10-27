@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Post a found item · Campus Lost &amp; Found{% endblock %}
+{% block content %}
+  <section class="form-page form-page-wide">
+    <div class="form-heading">
+      <p class="eyebrow">Help someone find their belongings</p>
+      <h1>Post a found item</h1>
+      <p>Share where and when you found it. Leave out personal or sensitive details.</p>
+    </div>
+    <form class="form-card" method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <label>Item title
+        <input name="title" required maxlength="120" value="{{ request.form.get('title', '') }}" placeholder="e.g. Blue water bottle">
+      </label>
+      <label>Description
+        <textarea name="description" rows="4" required maxlength="2000" placeholder="Describe the item and any identifying details.">{{ request.form.get('description', '') }}</textarea>
+      </label>
+      <div class="form-row">
+        <label>Location found
+          <input name="location" required maxlength="160" value="{{ request.form.get('location', '') }}" placeholder="e.g. Main Library, 2nd floor">
+        </label>
+        <label>Date found
+          <input type="date" name="date_found" required max="{{ today }}" value="{{ request.form.get('date_found', today) }}">
+        </label>
+      </div>
+      <label>Photo URL <span class="optional-label">Optional</span>
+        <input type="url" name="photo_url" maxlength="2048" value="{{ request.form.get('photo_url', '') }}" placeholder="https://example.com/photo.jpg">
+      </label>
+      <button class="button button-primary button-wide" type="submit">Publish item</button>
+    </form>
+  </section>
+{% endblock %}

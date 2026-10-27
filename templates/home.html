@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Browse found items · Campus Lost &amp; Found{% endblock %}
+{% block content %}
+  <section class="hero">
+    <div>
+      <p class="eyebrow">Good things find their way back</p>
+      <h1>Lost something on campus?</h1>
+      <p class="hero-copy">Browse recently found items or share something you found to help reunite it with its owner.</p>
+    </div>
+    {% if current_user %}
+      <a class="button button-primary" href="{{ url_for('new_item') }}">Post a found item</a>
+    {% else %}
+      <a class="button button-primary" href="{{ url_for('register') }}">Join the community</a>
+    {% endif %}
+  </section>
+
+  <form class="search-panel" action="{{ url_for('home') }}" method="get">
+    <label class="search-field">
+      <span class="sr-only">Search title, description, or location</span>
+      <input type="search" name="q" value="{{ search }}" placeholder="Search title, description, or location">
+    </label>
+    <label class="checkbox-label">
+      <input type="checkbox" name="unclaimed" value="1" {% if unclaimed_only %}checked{% endif %}>
+      <span>Still unclaimed only</span>
+    </label>
+    <button class="button button-dark" type="submit">Search</button>
+    {% if search or unclaimed_only %}
+      <a class="clear-link" href="{{ url_for('home') }}">Clear filters</a>
+    {% endif %}
+  </form>
+
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">Campus community</p>
+      <h2>{% if search or unclaimed_only %}Search results{% else %}Recently found{% endif %}</h2>
+    </div>
+    <span class="result-count">{{ items|length }} item{% if items|length != 1 %}s{% endif %}</span>
+  </div>
+
+  {% if items %}
+    <section class="item-grid" aria-label="Found items">
+      {% for item in items %}
+        {% include "_item_card.html" %}
+      {% endfor %}
+    </section>
+  {% else %}
+    <div class="empty-state">
+      <div class="empty-icon">⌕</div>
+      <h3>No items found</h3>
+      <p>Try different search terms or clear the filters.</p>
+    </div>
+  {% endif %}
+{% endblock %}

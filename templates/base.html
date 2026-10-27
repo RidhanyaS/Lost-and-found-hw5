@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Campus Lost &amp; Found{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="navbar container" aria-label="Main navigation">
+      <a class="brand" href="{{ url_for('home') }}">Campus Lost <span>&amp;</span> Found</a>
+      <div class="nav-links">
+        <a href="{{ url_for('home') }}">Browse items</a>
+        {% if current_user %}
+          <a class="nav-action" href="{{ url_for('new_item') }}">Post an item</a>
+          <a href="{{ url_for('user_profile', username=current_user['username']) }}">{{ current_user['username'] }}</a>
+          <form class="inline-form" action="{{ url_for('logout') }}" method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button class="nav-link-button" type="submit">Logout</button>
+          </form>
+        {% else %}
+          <a href="{{ url_for('login') }}">Login</a>
+          <a class="nav-action" href="{{ url_for('register') }}">Create account</a>
+        {% endif %}
+      </div>
+    </nav>
+  </header>
+
+  <main class="container page-content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-list" aria-live="polite">
+          {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="site-footer">
+    <div class="container">A little kindness can help something find its way home.</div>
+  </footer>
+</body>
+</html>

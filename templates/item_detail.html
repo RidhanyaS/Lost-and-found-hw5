@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}{{ item['title'] }} · Campus Lost &amp; Found{% endblock %}
+{% block content %}
+  <p class="back-link"><a href="{{ url_for('home') }}">← Browse all items</a></p>
+  <article class="detail-card">
+    <div class="detail-image-wrap">
+      {% if item['photo_url'] %}
+        <img class="detail-image" src="{{ item['photo_url'] }}" alt="{{ item['title'] }}"
+             onerror="this.onerror=null;this.src='{{ url_for('static', filename='placeholder.svg') }}'">
+      {% else %}
+        <img class="detail-image" src="{{ url_for('static', filename='placeholder.svg') }}" alt="No photo available">
+      {% endif %}
+    </div>
+    <div class="detail-content">
+      <span class="status-badge {% if item['returned'] %}status-returned{% else %}status-unclaimed{% endif %}">
+        {{ 'Returned' if item['returned'] else 'Unclaimed' }}
+      </span>
+      <p class="item-location"><span aria-hidden="true">⌖</span> {{ item['location'] }}</p>
+      <h1>{{ item['title'] }}</h1>
+      <p class="detail-description">{{ item['description'] }}</p>
+      <dl class="detail-facts">
+        <div><dt>Date found</dt><dd>{{ item['date_found']|date_display }}</dd></div>
+        <div><dt>Posted by</dt><dd><a href="{{ url_for('user_profile', username=item['username']) }}">@{{ item['username'] }}</a></dd></div>
+      </dl>
+      {% if current_user and current_user['id'] == item['user_id'] and not item['returned'] %}
+        <form method="post" action="{{ url_for('mark_returned', item_id=item['id']) }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="button button-primary" type="submit">Mark as returned</button>
+        </form>
+      {% endif %}
+    </div>
+  </article>
+{% endblock %}

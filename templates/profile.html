@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}@{{ profile_user['username'] }} · Campus Lost &amp; Found{% endblock %}
+{% block content %}
+  <section class="profile-heading">
+    <div class="avatar" aria-hidden="true">{{ profile_user['username'][0]|upper }}</div>
+    <div>
+      <p class="eyebrow">Community member</p>
+      <h1>@{{ profile_user['username'] }}</h1>
+      <p>{{ items|length }} posted item{% if items|length != 1 %}s{% endif %}</p>
+    </div>
+  </section>
+  <div class="section-heading">
+    <div><p class="eyebrow">Their contributions</p><h2>Found items</h2></div>
+  </div>
+  {% if items %}
+    <section class="item-grid" aria-label="This user's found items">
+      {% for item in items %}
+        {% include "_item_card.html" %}
+      {% endfor %}
+    </section>
+  {% else %}
+    <div class="empty-state"><h3>No items posted yet</h3><p>Check back later to see their found items.</p></div>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Page not found · Campus Lost &amp; Found{% endblock %}
+{% block content %}
+  <section class="empty-state error-page">
+    <p class="eyebrow">404 · Not found</p>
+    <h1>This page wandered off</h1>
+    <p>We couldn't find what you were looking for. It may have already found its way home.</p>
+    <a class="button button-primary" href="{{ url_for('home') }}">Back to found items</a>
+  </section>
+{% endblock %}
